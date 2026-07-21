@@ -14,10 +14,10 @@ import { MAP_STYLE, ATTRIBUTION, transformRequest } from '../lib/mapStyle'
 
 interface MapPaneProps {
   properties: Property[]
-  selectedNum: number | null
-  hoveredNum: number | null
-  onSelect: (num: number | null) => void
-  onHover: (num: number | null) => void
+  selectedId: string | null
+  hoveredId: string | null
+  onSelect: (id: string | null) => void
+  onHover: (id: string | null) => void
 }
 
 // Greater Austin default view — used before the first fit.
@@ -42,13 +42,13 @@ function fit(map: MapRef, props: Property[]) {
   )
 }
 
-export function MapPane({ properties, selectedNum, hoveredNum, onSelect, onHover }: MapPaneProps) {
+export function MapPane({ properties, selectedId, hoveredId, onSelect, onHover }: MapPaneProps) {
   const mapRef = useRef<MapRef>(null)
   const loaded = useRef(false)
   const geo = properties.filter((p) => p.lat != null && p.lng != null)
-  const fitKey = geo.map((p) => p.num).join(',')
+  const fitKey = geo.map((p) => p.id).join(',')
 
-  // Re-fit whenever the visible set changes (filters/search).
+  // Re-fit whenever the visible set changes (filters/search/pipeline).
   useEffect(() => {
     if (loaded.current && mapRef.current) fit(mapRef.current, properties)
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -56,11 +56,11 @@ export function MapPane({ properties, selectedNum, hoveredNum, onSelect, onHover
 
   // When a property is selected from the list, ease the map to it.
   useEffect(() => {
-    if (!loaded.current || !mapRef.current || selectedNum == null) return
-    const p = geo.find((g) => g.num === selectedNum)
+    if (!loaded.current || !mapRef.current || selectedId == null) return
+    const p = geo.find((g) => g.id === selectedId)
     if (p) mapRef.current.easeTo({ center: [p.lng!, p.lat!], duration: 600, zoom: Math.max(mapRef.current.getZoom(), 12) })
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [selectedNum])
+  }, [selectedId])
 
   const onLoad = useCallback(() => {
     loaded.current = true
@@ -68,7 +68,7 @@ export function MapPane({ properties, selectedNum, hoveredNum, onSelect, onHover
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [fitKey])
 
-  const selected = geo.find((p) => p.num === selectedNum) ?? null
+  const selected = geo.find((p) => p.id === selectedId) ?? null
 
   return (
     <div className="relative h-full w-full">
@@ -87,22 +87,22 @@ export function MapPane({ properties, selectedNum, hoveredNum, onSelect, onHover
 
         {geo.map((p) => {
           const meta = STATUS_META[p.status]
-          const isSelected = p.num === selectedNum
-          const isHovered = p.num === hoveredNum
+          const isSelected = p.id === selectedId
+          const isHovered = p.id === hoveredId
           const active = isSelected || isHovered
           return (
             <Marker
-              key={p.num}
+              key={p.id}
               longitude={p.lng!}
               latitude={p.lat!}
               anchor="center"
               onClick={(e) => {
                 e.originalEvent.stopPropagation()
-                onSelect(isSelected ? null : p.num)
+                onSelect(isSelected ? null : p.id)
               }}
             >
               <div
-                onMouseEnter={() => onHover(p.num)}
+                onMouseEnter={() => onHover(p.id)}
                 onMouseLeave={() => onHover(null)}
                 className="flex items-center justify-center rounded-full font-ui font-bold cursor-pointer transition-transform"
                 style={{

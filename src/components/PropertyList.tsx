@@ -5,27 +5,27 @@ import { formatSf } from '../lib/format'
 
 interface PropertyListProps {
   properties: Property[]
-  selectedNum: number | null
-  hoveredNum: number | null
-  onSelect: (num: number | null) => void
-  onHover: (num: number | null) => void
+  selectedId: string | null
+  hoveredId: string | null
+  onSelect: (id: string | null) => void
+  onHover: (id: string | null) => void
 }
 
 export function PropertyList({
   properties,
-  selectedNum,
-  hoveredNum,
+  selectedId,
+  hoveredId,
   onSelect,
   onHover,
 }: PropertyListProps) {
-  const rowRefs = useRef<Record<number, HTMLButtonElement | null>>({})
+  const rowRefs = useRef<Record<string, HTMLButtonElement | null>>({})
 
   // Scroll the selected row into view when selection comes from the map.
   useEffect(() => {
-    if (selectedNum != null) {
-      rowRefs.current[selectedNum]?.scrollIntoView({ block: 'nearest', behavior: 'smooth' })
+    if (selectedId != null) {
+      rowRefs.current[selectedId]?.scrollIntoView({ block: 'nearest', behavior: 'smooth' })
     }
-  }, [selectedNum])
+  }, [selectedId])
 
   const groups = STATUS_ORDER.map((s) => ({
     status: s,
@@ -59,17 +59,17 @@ export function PropertyList({
             </div>
             <ul>
               {g.items.map((p) => {
-                const isSelected = p.num === selectedNum
-                const isHovered = p.num === hoveredNum
+                const isSelected = p.id === selectedId
+                const isHovered = p.id === hoveredId
                 const noGeo = p.lat == null || p.lng == null
                 return (
-                  <li key={p.num}>
+                  <li key={p.id}>
                     <button
                       ref={(el) => {
-                        rowRefs.current[p.num] = el
+                        rowRefs.current[p.id] = el
                       }}
-                      onClick={() => onSelect(isSelected ? null : p.num)}
-                      onMouseEnter={() => onHover(p.num)}
+                      onClick={() => onSelect(isSelected ? null : p.id)}
+                      onMouseEnter={() => onHover(p.id)}
                       onMouseLeave={() => onHover(null)}
                       className="flex w-full items-start gap-2.5 px-4 py-2 text-left transition-colors"
                       style={{

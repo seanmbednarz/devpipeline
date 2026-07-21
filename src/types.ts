@@ -1,23 +1,42 @@
 export type Status = 'uc' | 'proposed' | 'delivered'
+export type Pipeline = 'office' | 'industrial'
 
 export interface Property {
-  /** Map pin number (1–58 in the Q4 2025 edition) */
+  /** Stable id, e.g. "office-1" / "industrial-42" */
+  id: string
+  pipeline: Pipeline
+  /** Map pin number within the pipeline */
   num: number
   name: string
   address: string
-  /** Rentable square feet */
+  /** Primary size — Office SF, or Industrial RBA (rentable building area) */
   sf: number
   status: Status
   lat: number | null
   lng: number | null
+
+  // Rich fields (mostly Industrial; optional on Office)
+  buildingClass?: string | null
+  availableSf?: number | null
+  developer?: string | null
+  leasingCompany?: string | null
+  leasingContact?: string | null
+  submarket?: string | null
+  city?: string | null
+  zip?: string | null
+  county?: string | null
+  parkingRatio?: number | null
+  buildings?: number | null
+  constructionBegin?: string | null
+
+  /** User-added photo URLs (populated once the editable backend is wired) */
+  photos?: string[]
 }
 
 export interface StatusMeta {
   key: Status
   label: string
-  /** Solid brand color for dots, chips, totals */
   color: string
-  /** Readable text color to sit on top of `color` */
   onColor: string
 }
 
@@ -29,3 +48,17 @@ export const STATUS_META: Record<Status, StatusMeta> = {
 
 /** Display order for legend, filters, totals */
 export const STATUS_ORDER: Status[] = ['uc', 'proposed', 'delivered']
+
+export interface PipelineMeta {
+  key: Pipeline
+  label: string
+  /** Label for the primary size metric */
+  sizeLabel: string
+}
+
+export const PIPELINE_META: Record<Pipeline, PipelineMeta> = {
+  office: { key: 'office', label: 'Office', sizeLabel: 'SF' },
+  industrial: { key: 'industrial', label: 'Industrial', sizeLabel: 'RBA' },
+}
+
+export const PIPELINE_ORDER: Pipeline[] = ['office', 'industrial']

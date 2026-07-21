@@ -1,8 +1,9 @@
-import type { Property } from '../types'
+import type { Pipeline, Property } from '../types'
 import { STATUS_META, STATUS_ORDER } from '../types'
 import { formatSf } from '../lib/format'
 
-export function Totals({ properties }: { properties: Property[] }) {
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+export function Totals({ properties }: { properties: Property[]; pipeline: Pipeline }) {
   return (
     <div className="grid grid-cols-3 gap-2">
       {STATUS_ORDER.map((s) => {
