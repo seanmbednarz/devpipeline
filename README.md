@@ -68,9 +68,16 @@ never wipes your photos or edits.
 3. **Create your editor login:** Dashboard → Authentication → Users → Add user
    (email + password). That's the account you sign in with.
 
-**Using it:** Click **Sign in** (top right) → an **Edit details** button and
-**+ Add photos** appear in each property's detail panel. The public (signed-out)
-view is read-only. Editing latitude/longitude lets you fix an approximate pin.
+**Using it:** The sign-in entry is hidden from the public. Open the site with the
+secret unlock — **`?edit`** (e.g. `https://pipeline.ecrtx.io/?edit`) — and the
+sign-in modal appears. After you sign in, the session persists on your device, so
+**Edit details** and **+ Add photos** stay available at the normal URL. Clients
+(signed out, no `?edit`) only ever see a clean read-only site — no login button.
+Editing latitude/longitude lets you fix an approximate pin.
+
+> Security is your Supabase login + row-level security, not the hidden URL — even
+> if someone finds `?edit`, they still can't sign in or write. Ask if you'd like a
+> less-guessable unlock than `?edit`.
 
 ## Deploy (Cloudflare Pages)
 

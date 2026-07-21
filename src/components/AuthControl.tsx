@@ -1,5 +1,23 @@
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
 import { useAuth } from '../hooks/useAuth'
+
+/**
+ * The sign-in entry point is hidden from the public. It only appears when the
+ * page is opened with a secret unlock — `?edit` in the query string, or the
+ * `#edit` / `#admin` hash. Bookmark e.g. https://pipeline.ecrtx.io/?edit to sign
+ * in; once authenticated, the session persists so edit controls stay available
+ * at the normal URL. (Real security is the Supabase login + row-level security —
+ * this just keeps a login button off the client-facing view.)
+ */
+function editUnlocked(): boolean {
+  try {
+    if (new URLSearchParams(window.location.search).has('edit')) return true
+    const h = window.location.hash.replace(/^#\/?/, '').toLowerCase()
+    return h === 'edit' || h === 'admin'
+  } catch {
+    return false
+  }
+}
 
 function SignInModal({ onClose }: { onClose: () => void }) {
   const { signIn } = useAuth()
@@ -73,7 +91,9 @@ function SignInModal({ onClose }: { onClose: () => void }) {
 
 export function AuthControl() {
   const { enabled, isEditor, email, signOut } = useAuth()
-  const [modal, setModal] = useState(false)
+  const unlocked = useMemo(editUnlocked, [])
+  // Auto-open the sign-in modal when arriving via the secret unlock URL.
+  const [modal, setModal] = useState(() => editUnlocked())
 
   if (!enabled) return null
 
@@ -92,6 +112,9 @@ export function AuthControl() {
       </div>
     )
   }
+
+  // Public view: no sign-in button unless the page was opened with the secret unlock.
+  if (!unlocked) return null
 
   return (
     <>
