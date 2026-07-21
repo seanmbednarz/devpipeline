@@ -133,9 +133,8 @@ export function PropertyDetail({ property: p, onClose, onSaveOverride }: Propert
       </div>
 
       <div className="ecr-scroll min-h-0 flex-1 overflow-y-auto">
-        <div className="mx-auto flex w-full max-w-[1400px] flex-col lg:flex-row lg:items-stretch">
         {/* Photos */}
-        <div className="border-b border-ecr-charcoal-20 p-4 lg:flex-1 lg:border-b-0 lg:p-6">
+        <div className="border-b border-ecr-charcoal-20 p-4">
           <div className="mb-2 flex items-center justify-between">
             <span className="font-ui text-[10px] font-bold uppercase tracking-[0.14em] text-ecr-charcoal">
               Photos
@@ -165,7 +164,7 @@ export function PropertyDetail({ property: p, onClose, onSaveOverride }: Propert
           </div>
           {photoError && <p className="mb-2 font-ui text-[11px] text-ecr-red">{photoError}</p>}
           {photos.length > 0 ? (
-            <div className="grid grid-cols-2 gap-2 sm:grid-cols-3 xl:grid-cols-4">
+            <div className="grid grid-cols-1 gap-2">
               {photos.map((photo) => (
                 <div key={photo.id} className="group relative">
                   <img
@@ -197,7 +196,7 @@ export function PropertyDetail({ property: p, onClose, onSaveOverride }: Propert
         </div>
 
         {/* Details */}
-        <div className="px-4 pb-6 pt-3 lg:w-[380px] lg:flex-none lg:border-l lg:border-ecr-charcoal-20 lg:pt-6">
+        <div className="px-4 pb-6 pt-3">
           {editing ? (
             <div className="space-y-2">
               <Input label="Name" value={val('name')} onChange={set('name')} />
@@ -281,7 +280,6 @@ export function PropertyDetail({ property: p, onClose, onSaveOverride }: Propert
               />
             </>
           )}
-        </div>
         </div>
       </div>
     </div>
