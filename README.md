@@ -74,6 +74,28 @@ view is read-only. Editing latitude/longitude lets you fix an approximate pin.
 
 ## Deploy (Cloudflare Pages)
 
-- Build command: `npm run build`
-- Output directory: `dist`
-- `public/_redirects` handles SPA routing.
+Live at **https://devpipeline.pages.dev** (custom domain: **pipeline.ecrtx.io**).
+Cloudflare Pages project: `devpipeline`. Build command `npm run build`, output
+`dist`; `public/_redirects` handles SPA routing.
+
+### Auto-deploy (GitHub Actions)
+
+[`.github/workflows/deploy.yml`](.github/workflows/deploy.yml) builds and deploys
+on every push to `main`. It needs **one** repo secret:
+
+- `CLOUDFLARE_API_TOKEN` — a Cloudflare API token with the **Cloudflare Pages :
+  Edit** permission. Create at
+  https://dash.cloudflare.com/profile/api-tokens → *Create Token* → *Custom* →
+  add permission **Account · Cloudflare Pages · Edit** → scope to your account.
+  Then add it under GitHub → repo **Settings → Secrets and variables → Actions →
+  New repository secret**.
+
+(The account id is set in the workflow; the Supabase URL + publishable key are
+public and inlined there. Optionally set a `VITE_MAPBOX_TOKEN` repo *variable*.)
+
+### Manual deploy
+
+```bash
+npm run build
+npx wrangler pages deploy dist --project-name devpipeline --branch main
+```

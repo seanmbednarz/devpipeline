@@ -1,0 +1,41 @@
+name: Deploy to Cloudflare Pages
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch: {} # allow manual runs from the Actions tab
+
+concurrency:
+  group: pages-deploy
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    env:
+      # Public, publishable values — safe to commit (they ship in the client bundle).
+      # RLS protects the data; anonymous writes are blocked.
+      VITE_SUPABASE_URL: https://eiekfdcilxjksvrqhvcn.supabase.co
+      VITE_SUPABASE_ANON_KEY: sb_publishable_SnTmsel0f3ptO_oF2BEbqQ_j8hoFxIF
+      # Optional: set VITE_MAPBOX_TOKEN as a repo variable to use the Mapbox basemap.
+      VITE_MAPBOX_TOKEN: ${{ vars.VITE_MAPBOX_TOKEN }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - run: npm ci
+
+      - run: npm run build
+
+      - name: Deploy to Cloudflare Pages
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: 341d49fdbaf43a3d9cba4c14911dcc49
+          command: pages deploy dist --project-name=devpipeline --branch=main
