@@ -94,7 +94,7 @@ export default function App() {
         ))}
       </div>
 
-      <div className="flex min-h-0 flex-1">
+      <div className="relative flex min-h-0 flex-1">
         {/* Map */}
         <main className={`min-w-0 flex-1 ${!showAside ? 'block' : 'hidden'} lg:block`}>
           <MapPane
@@ -136,18 +136,18 @@ export default function App() {
           <div className="border-t border-ecr-charcoal-20 px-4 py-2 font-ui text-[9px] uppercase tracking-[0.1em] text-ecr-gray-mid">
             {EDITION[pipeline]} · {all.length} projects · 114 W 7th St, Austin
           </div>
-
-          {/* Detail overlay */}
-          {selected && (
-            <div className="absolute inset-0 z-30">
-              <PropertyDetail
-                property={selected}
-                onClose={() => setSelectedId(null)}
-                onSaveOverride={saveOverride}
-              />
-            </div>
-          )}
         </aside>
+
+        {/* Full-width detail overlay (spans map + sidebar) */}
+        {selected && (
+          <div className="absolute inset-0 z-40">
+            <PropertyDetail
+              property={selected}
+              onClose={() => setSelectedId(null)}
+              onSaveOverride={saveOverride}
+            />
+          </div>
+        )}
       </div>
     </div>
   )
