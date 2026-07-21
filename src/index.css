@@ -1,0 +1,44 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  font-family: 'Montserrat', sans-serif;
+  color: #3f4443;
+  background: #efeade;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Thin, branded scrollbars for the property list */
+.ecr-scroll::-webkit-scrollbar {
+  width: 8px;
+}
+.ecr-scroll::-webkit-scrollbar-thumb {
+  background: #bec6c4;
+  border-radius: 4px;
+}
+.ecr-scroll::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+/* Branded MapLibre popup */
+.ecr-popup .maplibregl-popup-content {
+  padding: 8px 10px;
+  border-radius: 8px;
+  box-shadow: 0 4px 16px rgba(63, 68, 67, 0.22);
+  border: 1px solid #d4d6d6;
+}
+.ecr-popup .maplibregl-popup-tip {
+  border-top-color: #ffffff;
+}
+.maplibregl-ctrl-attrib {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 10px;
+}
