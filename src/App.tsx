@@ -8,6 +8,7 @@ import { Totals } from './components/Totals'
 import { PropertyList } from './components/PropertyList'
 import { PropertyDetail } from './components/PropertyDetail'
 import { MapPane } from './components/MapPane'
+import { useOverrides } from './hooks/useOverrides'
 
 const LARGE_SF = 25_000
 const EDITION: Record<Pipeline, string> = { office: 'Q4 2025', industrial: 'Q3 2026' }
@@ -21,7 +22,8 @@ export default function App() {
   const [hoveredId, setHoveredId] = useState<string | null>(null)
   const [mobileView, setMobileView] = useState<'map' | 'list'>('map')
 
-  const all = PIPELINE_DATA[pipeline]
+  const { apply, save: saveOverride } = useOverrides()
+  const all = useMemo(() => PIPELINE_DATA[pipeline].map(apply), [pipeline, apply])
 
   // Reset transient state when switching pipelines.
   useEffect(() => {
@@ -138,7 +140,11 @@ export default function App() {
           {/* Detail overlay */}
           {selected && (
             <div className="absolute inset-0 z-30">
-              <PropertyDetail property={selected} onClose={() => setSelectedId(null)} />
+              <PropertyDetail
+                property={selected}
+                onClose={() => setSelectedId(null)}
+                onSaveOverride={saveOverride}
+              />
             </div>
           )}
         </aside>

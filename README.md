@@ -50,6 +50,28 @@ All project data lives in [`src/data/properties.ts`](src/data/properties.ts). Ea
 
 Edit the list and redeploy.
 
+## Photos & editing (Supabase)
+
+Photos and inline field edits are stored in Supabase. When `VITE_SUPABASE_URL` /
+`VITE_SUPABASE_ANON_KEY` are unset, the app runs as a static read-only build (no
+sign-in, no photos). The static per-quarter data stays the source of truth —
+edits are stored as **overrides** that layer on top, so a quarterly re-import
+never wipes your photos or edits.
+
+**One-time setup:**
+
+1. **Run the schema:** Supabase Dashboard → SQL → paste
+   [`supabase/migrations/0001_init.sql`](supabase/migrations/0001_init.sql) → Run.
+   (Creates the `property_photos` / `property_overrides` tables, the
+   `pipeline-photos` storage bucket, and RLS: public read, signed-in write.)
+2. **Add the env values** to `.env` (public API values — never the service_role key).
+3. **Create your editor login:** Dashboard → Authentication → Users → Add user
+   (email + password). That's the account you sign in with.
+
+**Using it:** Click **Sign in** (top right) → an **Edit details** button and
+**+ Add photos** appear in each property's detail panel. The public (signed-out)
+view is read-only. Editing latitude/longitude lets you fix an approximate pin.
+
 ## Deploy (Cloudflare Pages)
 
 - Build command: `npm run build`
