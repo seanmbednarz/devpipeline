@@ -1,12 +1,13 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { PIPELINE_DATA } from './data/pipelines'
 import type { Pipeline, Status } from './types'
-import { STATUS_ORDER } from './types'
+import { STATUS_ORDER, STATUS_META, PIPELINE_META } from './types'
 import { Header } from './components/Header'
 import { Filters } from './components/Filters'
 import { Totals } from './components/Totals'
 import { PropertyList } from './components/PropertyList'
 import { PropertyDetail } from './components/PropertyDetail'
+import { PrintReport } from './components/PrintReport'
 import { MapPane } from './components/MapPane'
 import { useOverrides } from './hooks/useOverrides'
 
@@ -22,6 +23,8 @@ export default function App() {
   const [selectedId, setSelectedId] = useState<string | null>(null)
   const [hoveredId, setHoveredId] = useState<string | null>(null)
   const [mobileView, setMobileView] = useState<'map' | 'list'>('map')
+  const [printing, setPrinting] = useState(false)
+  const reportRef = useRef<HTMLDivElement>(null)
 
   const { apply, save: saveOverride } = useOverrides()
   const all = useMemo(() => PIPELINE_DATA[pipeline].map(apply), [pipeline, apply])
@@ -85,9 +88,41 @@ export default function App() {
 
   const showAside = selected != null || mobileView === 'list'
 
+  // Human summary of the active filters for the PDF header.
+  const filterSummary = useMemo(() => {
+    const parts: string[] = []
+    if (active.size < STATUS_ORDER.length) {
+      parts.push(STATUS_ORDER.filter((s) => active.has(s)).map((s) => STATUS_META[s].label).join(', '))
+    }
+    if (submarket !== 'all') parts.push(submarket)
+    if (q) parts.push(`“${query.trim()}”`)
+    if (largeOnly) parts.push('Above 25,000 SF')
+    return parts.length ? parts.join('  ·  ') : 'All projects'
+  }, [active, submarket, q, query, largeOnly])
+
+  // Render the print report, wait for its thumbnails to load, then open the print dialog.
+  const handlePrint = useCallback(async () => {
+    setPrinting(true)
+    await new Promise((r) => setTimeout(r, 60))
+    const imgs = Array.from(reportRef.current?.querySelectorAll('img') ?? [])
+    await Promise.all(
+      imgs.map((img) =>
+        img.complete && img.naturalWidth > 0
+          ? Promise.resolve()
+          : new Promise<void>((res) => {
+              img.onload = () => res()
+              img.onerror = () => res()
+            }),
+      ),
+    )
+    window.addEventListener('afterprint', () => setPrinting(false), { once: true })
+    window.print()
+  }, [])
+
   return (
-    <div className="flex h-full flex-col bg-ecr-cream">
-      <Header pipeline={pipeline} onPipeline={setPipeline} />
+    <>
+    <div className="app-shell flex h-full flex-col bg-ecr-cream">
+      <Header pipeline={pipeline} onPipeline={setPipeline} onPrint={handlePrint} />
 
       {/* Mobile view toggle */}
       <div className="flex gap-1 border-b border-ecr-charcoal-20 bg-ecr-cream-80 p-1.5 lg:hidden">
@@ -168,5 +203,17 @@ export default function App() {
         </aside>
       </div>
     </div>
+
+    {printing && (
+      <PrintReport
+        ref={reportRef}
+        properties={visible}
+        pipelineLabel={PIPELINE_META[pipeline].label}
+        edition={EDITION[pipeline]}
+        subtitle={filterSummary}
+        date={new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}
+      />
+    )}
+    </>
   )
 }
