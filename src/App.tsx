@@ -18,6 +18,7 @@ export default function App() {
   const [active, setActive] = useState<Set<Status>>(new Set(STATUS_ORDER))
   const [query, setQuery] = useState('')
   const [largeOnly, setLargeOnly] = useState(false)
+  const [submarket, setSubmarket] = useState<string>('all')
   const [selectedId, setSelectedId] = useState<string | null>(null)
   const [hoveredId, setHoveredId] = useState<string | null>(null)
   const [mobileView, setMobileView] = useState<'map' | 'list'>('map')
@@ -31,14 +32,28 @@ export default function App() {
     setHoveredId(null)
     setQuery('')
     setActive(new Set(STATUS_ORDER))
+    setSubmarket('all')
   }, [pipeline])
 
   const q = query.trim().toLowerCase()
+
+  // Submarket options for the active pipeline (with counts). Empty for Office.
+  const submarkets = useMemo(() => {
+    const m = new Map<string, number>()
+    for (const p of all) {
+      const s = p.submarket?.trim()
+      if (s) m.set(s, (m.get(s) ?? 0) + 1)
+    }
+    return [...m.entries()]
+      .map(([name, count]) => ({ name, count }))
+      .sort((a, b) => a.name.localeCompare(b.name))
+  }, [all])
 
   const base = useMemo(
     () =>
       all.filter((p) => {
         if (largeOnly && p.sf < LARGE_SF) return false
+        if (submarket !== 'all' && (p.submarket ?? '') !== submarket) return false
         if (!q) return true
         return (
           p.name.toLowerCase().includes(q) ||
@@ -47,7 +62,7 @@ export default function App() {
           (p.submarket?.toLowerCase().includes(q) ?? false)
         )
       }),
-    [all, q, largeOnly],
+    [all, q, largeOnly, submarket],
   )
 
   const counts = useMemo(() => {
@@ -122,6 +137,9 @@ export default function App() {
               largeOnly={largeOnly}
               onLargeOnly={setLargeOnly}
               counts={counts}
+              submarkets={submarkets}
+              submarket={submarket}
+              onSubmarket={setSubmarket}
             />
           </div>
           <div className="ecr-scroll min-h-0 flex-1 overflow-y-auto">

@@ -9,6 +9,9 @@ interface FiltersProps {
   largeOnly: boolean
   onLargeOnly: (v: boolean) => void
   counts: Record<Status, number>
+  submarkets: { name: string; count: number }[]
+  submarket: string
+  onSubmarket: (s: string) => void
 }
 
 export function Filters({
@@ -19,6 +22,9 @@ export function Filters({
   largeOnly,
   onLargeOnly,
   counts,
+  submarkets,
+  submarket,
+  onSubmarket,
 }: FiltersProps) {
   return (
     <div className="space-y-2.5">
@@ -69,6 +75,34 @@ export function Filters({
           )
         })}
       </div>
+
+      {/* Submarket (only when the pipeline has submarkets, e.g. Industrial) */}
+      {submarkets.length > 0 && (
+        <div className="relative">
+          <select
+            value={submarket}
+            onChange={(e) => onSubmarket(e.target.value)}
+            className="w-full appearance-none rounded-md border border-ecr-charcoal-20 bg-white py-2 pl-3 pr-8 font-ui text-[12px] text-ecr-charcoal focus:border-ecr-charcoal-70 focus:outline-none"
+            aria-label="Filter by submarket"
+          >
+            <option value="all">All submarkets</option>
+            {submarkets.map((s) => (
+              <option key={s.name} value={s.name}>
+                {s.name} ({s.count})
+              </option>
+            ))}
+          </select>
+          <svg
+            className="pointer-events-none absolute right-2.5 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-ecr-gray-mid"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2.2"
+          >
+            <path d="m6 9 6 6 6-6" />
+          </svg>
+        </div>
+      )}
 
       {/* SF threshold */}
       <label className="flex cursor-pointer items-center gap-2 font-ui text-[11px] font-medium text-ecr-charcoal-70">
