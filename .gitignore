@@ -8,3 +8,7 @@ dist-ssr
 .DS_Store
 .vscode/*
 !.vscode/extensions.json
+
+# Raw photo-import archive (staging only). Matched + optimized copies live in
+# public/photos/ (committed); the full archive is not deployed.
+public/property photos/
