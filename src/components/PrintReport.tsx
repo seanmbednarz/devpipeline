@@ -33,7 +33,8 @@ export const PrintReport = forwardRef<HTMLDivElement, PrintReportProps>(function
     <div ref={ref} className="print-report">
       <div className="pr-header">
         <div>
-          <div className="pr-kicker">ECR · Greater Austin Area</div>
+          <img className="pr-logo" src="/brand/ecr-logo.png" alt="ECR" />
+          <div className="pr-kicker">Greater Austin Area</div>
           <h1 className="pr-title">{pipelineLabel} Development Pipeline</h1>
           <div className="pr-sub">{subtitle}</div>
         </div>

@@ -87,6 +87,12 @@ body {
   padding-bottom: 8px;
   margin-bottom: 10px;
 }
+.pr-logo {
+  height: 34px;
+  width: auto;
+  display: block;
+  margin-bottom: 8px;
+}
 .pr-kicker {
   font-size: 8px;
   letter-spacing: 0.22em;

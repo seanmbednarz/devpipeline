@@ -12,7 +12,7 @@ import { MapPane } from './components/MapPane'
 import { useOverrides } from './hooks/useOverrides'
 
 const LARGE_SF = 25_000
-const EDITION: Record<Pipeline, string> = { office: 'Q4 2025', industrial: 'Q3 2026' }
+const EDITION: Record<Pipeline, string> = { office: 'Q3 2026', industrial: 'Q3 2026' }
 
 export default function App() {
   const [pipeline, setPipeline] = useState<Pipeline>('office')

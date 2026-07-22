@@ -1,6 +1,6 @@
 import type { Property } from '../types'
 
-// Source: ECR Office Development Pipeline — Greater Austin Area, Q4 2025 (Revised 11.5.25).
+// Source: ECR Office Development Pipeline — Greater Austin Area, Q3 2026 (Revised 11.5.25).
 // Coordinates geocoded from listed addresses (OSM Nominatim); intersections approximated by hand.
 // Update each quarter by editing this list.
 export const OFFICE: Property[] = [
