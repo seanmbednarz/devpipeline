@@ -16,11 +16,11 @@ interface PropertyDetailProps {
 function Field({ label, value }: { label: string; value: React.ReactNode }) {
   if (value == null || value === '') return null
   return (
-    <div className="border-b border-ecr-charcoal-10 py-2">
-      <div className="font-ui text-[8.5px] font-semibold uppercase tracking-[0.14em] text-ecr-gray-mid">
+    <div className="border-b border-ecr-charcoal-10 py-2.5">
+      <div className="font-ui text-[10px] font-semibold uppercase tracking-[0.14em] text-ecr-gray-mid">
         {label}
       </div>
-      <div className="mt-0.5 font-body text-[13px] text-ecr-charcoal">{value}</div>
+      <div className="mt-1 font-body text-[16px] leading-snug text-ecr-charcoal">{value}</div>
     </div>
   )
 }
@@ -38,14 +38,14 @@ function Input({
 }) {
   return (
     <label className="block">
-      <span className="font-ui text-[8.5px] font-semibold uppercase tracking-[0.14em] text-ecr-gray-mid">
+      <span className="font-ui text-[10px] font-semibold uppercase tracking-[0.14em] text-ecr-gray-mid">
         {label}
       </span>
       <input
         type={type}
         value={value}
         onChange={(e) => onChange(e.target.value)}
-        className="mt-0.5 w-full rounded border border-ecr-charcoal-20 px-2 py-1 font-body text-[13px] focus:border-ecr-charcoal-70 focus:outline-none"
+        className="mt-0.5 w-full rounded border border-ecr-charcoal-20 px-2 py-1.5 font-body text-[15px] focus:border-ecr-charcoal-70 focus:outline-none"
       />
     </label>
   )
@@ -111,16 +111,16 @@ export function PropertyDetail({ property: p, onClose, onSaveOverride }: Propert
                 {p.num}
               </span>
               <span
-                className="rounded-sm px-1.5 py-0.5 font-ui text-[8.5px] font-semibold uppercase tracking-[0.14em]"
+                className="rounded-sm px-1.5 py-0.5 font-ui text-[9.5px] font-semibold uppercase tracking-[0.14em]"
                 style={{ background: meta.color, color: '#fff' }}
               >
                 {meta.label}
               </span>
             </div>
-            <h2 className="mt-2 font-ui text-[15px] font-extrabold uppercase leading-tight tracking-[0.02em] text-ecr-charcoal">
+            <h2 className="mt-2 font-ui text-[18px] font-extrabold uppercase leading-tight tracking-[0.02em] text-ecr-charcoal">
               {p.name}
             </h2>
-            <p className="mt-0.5 font-body text-[12px] italic text-ecr-charcoal-70">{p.address}</p>
+            <p className="mt-1 font-body text-[14px] italic text-ecr-charcoal-70">{p.address}</p>
           </div>
           <button
             onClick={onClose}
@@ -138,7 +138,7 @@ export function PropertyDetail({ property: p, onClose, onSaveOverride }: Propert
         {/* Photos */}
         <div className="border-b border-ecr-charcoal-20 p-4">
           <div className="mb-2 flex items-center justify-between">
-            <span className="font-ui text-[10px] font-bold uppercase tracking-[0.14em] text-ecr-charcoal">
+            <span className="font-ui text-[11px] font-bold uppercase tracking-[0.14em] text-ecr-charcoal">
               Photos
             </span>
             {isEditor && (
@@ -268,7 +268,7 @@ export function PropertyDetail({ property: p, onClose, onSaveOverride }: Propert
               {isEditor && (
                 <button
                   onClick={startEdit}
-                  className="mb-2 w-full rounded-md border border-dashed border-ecr-charcoal-20 py-1.5 font-ui text-[10px] font-semibold uppercase tracking-[0.1em] text-ecr-charcoal-70 transition-colors hover:border-ecr-charcoal-70 hover:text-ecr-charcoal"
+                  className="mb-2 w-full rounded-md border border-dashed border-ecr-charcoal-20 py-2 font-ui text-[11px] font-semibold uppercase tracking-[0.1em] text-ecr-charcoal-70 transition-colors hover:border-ecr-charcoal-70 hover:text-ecr-charcoal"
                 >
                   Edit details
                 </button>
