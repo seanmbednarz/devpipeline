@@ -18,6 +18,10 @@ interface MapPaneProps {
   hoveredId: string | null
   onSelect: (id: string | null) => void
   onHover: (id: string | null) => void
+  /** When adding a property: clicks drop the new pin instead of deselecting. */
+  adding?: boolean
+  newLocation?: { lat: number; lng: number } | null
+  onMapClick?: (lng: number, lat: number) => void
 }
 
 // Greater Austin default view — used before the first fit.
@@ -42,7 +46,16 @@ function fit(map: MapRef, props: Property[]) {
   )
 }
 
-export function MapPane({ properties, selectedId, hoveredId, onSelect, onHover }: MapPaneProps) {
+export function MapPane({
+  properties,
+  selectedId,
+  hoveredId,
+  onSelect,
+  onHover,
+  adding = false,
+  newLocation = null,
+  onMapClick,
+}: MapPaneProps) {
   const mapRef = useRef<MapRef>(null)
   const loaded = useRef(false)
   const geo = properties.filter((p) => p.lat != null && p.lng != null)
@@ -79,11 +92,29 @@ export function MapPane({ properties, selectedId, hoveredId, onSelect, onHover }
         transformRequest={transformRequest}
         attributionControl={false}
         onLoad={onLoad}
-        onClick={() => onSelect(null)}
+        cursor={adding ? 'crosshair' : undefined}
+        onClick={(e) => {
+          if (adding && onMapClick) onMapClick(e.lngLat.lng, e.lngLat.lat)
+          else onSelect(null)
+        }}
         style={{ position: 'absolute', inset: 0 }}
       >
         <NavigationControl position="top-left" showCompass={false} />
         <AttributionControl compact customAttribution={ATTRIBUTION} />
+
+        {adding && newLocation && (
+          <Marker longitude={newLocation.lng} latitude={newLocation.lat} anchor="bottom">
+            <svg width="30" height="40" viewBox="0 0 30 40" style={{ filter: 'drop-shadow(0 2px 3px rgba(0,0,0,.4))' }}>
+              <path
+                d="M15 0C7 0 1 6 1 14c0 9 14 26 14 26s14-17 14-26C29 6 23 0 15 0z"
+                fill="#D6001C"
+                stroke="#fff"
+                strokeWidth="2"
+              />
+              <circle cx="15" cy="14" r="5" fill="#fff" />
+            </svg>
+          </Marker>
+        )}
 
         {geo.map((p) => {
           const meta = STATUS_META[p.status]

@@ -9,7 +9,9 @@ import { PropertyList } from './components/PropertyList'
 import { PropertyDetail } from './components/PropertyDetail'
 import { PrintReport } from './components/PrintReport'
 import { MapPane } from './components/MapPane'
-import { useOverrides } from './hooks/useOverrides'
+import { AddProperty } from './components/AddProperty'
+import { useOverrides, type OverridePatch } from './hooks/useOverrides'
+import { useAuth } from './hooks/useAuth'
 
 const LARGE_SF = 25_000
 const EDITION: Record<Pipeline, string> = { office: 'Q3 2026', industrial: 'Q3 2026' }
@@ -24,10 +26,38 @@ export default function App() {
   const [hoveredId, setHoveredId] = useState<string | null>(null)
   const [mobileView, setMobileView] = useState<'map' | 'list'>('map')
   const [printing, setPrinting] = useState(false)
+  const [adding, setAdding] = useState(false)
+  const [newLoc, setNewLoc] = useState<{ lat: number; lng: number } | null>(null)
   const reportRef = useRef<HTMLDivElement>(null)
 
-  const { apply, save: saveOverride } = useOverrides()
-  const all = useMemo(() => PIPELINE_DATA[pipeline].map(apply), [pipeline, apply])
+  const { isEditor } = useAuth()
+  const {
+    apply,
+    additions,
+    hiddenIds,
+    save: saveOverride,
+    remove: removeProperty,
+    restore,
+    addProperty,
+  } = useOverrides()
+
+  // Merge static data + editor additions, drop hidden, apply field edits, then
+  // number 1…N by status + size so add/remove auto-renumbers.
+  const all = useMemo(() => {
+    const staticProps = PIPELINE_DATA[pipeline].filter((p) => !hiddenIds.has(p.id))
+    const added = additions.filter((p) => p.pipeline === pipeline)
+    const list = [...staticProps, ...added].map(apply)
+    const order: Record<Status, number> = { uc: 0, proposed: 1, delivered: 2 }
+    const sorted = [...list].sort((a, b) => order[a.status] - order[b.status] || b.sf - a.sf)
+    const numById = new Map(sorted.map((p, i) => [p.id, i + 1]))
+    return list.map((p) => ({ ...p, num: numById.get(p.id)! }))
+  }, [pipeline, apply, additions, hiddenIds])
+
+  // Hidden (soft-deleted) static properties, for the editor's "Removed" list.
+  const removed = useMemo(
+    () => PIPELINE_DATA[pipeline].filter((p) => hiddenIds.has(p.id)),
+    [pipeline, hiddenIds],
+  )
 
   // Reset transient state when switching pipelines.
   useEffect(() => {
@@ -36,6 +66,8 @@ export default function App() {
     setQuery('')
     setActive(new Set(STATUS_ORDER))
     setSubmarket('all')
+    setAdding(false)
+    setNewLoc(null)
   }, [pipeline])
 
   const q = query.trim().toLowerCase()
@@ -86,7 +118,26 @@ export default function App() {
       return next
     })
 
-  const showAside = selected != null || mobileView === 'list'
+  const showAside = selected != null || adding || mobileView === 'list'
+
+  const startAdd = () => {
+    setSelectedId(null)
+    setNewLoc(null)
+    setAdding(true)
+  }
+  const cancelAdd = () => {
+    setAdding(false)
+    setNewLoc(null)
+  }
+  const handleAddSave = async (fields: OverridePatch) => {
+    const { id, error } = await addProperty(pipeline, fields)
+    if (!error) {
+      setAdding(false)
+      setNewLoc(null)
+      setSelectedId(id)
+    }
+    return { error }
+  }
 
   // Human summary of the active filters for the PDF header.
   const filterSummary = useMemo(() => {
@@ -153,6 +204,9 @@ export default function App() {
             hoveredId={hoveredId}
             onSelect={setSelectedId}
             onHover={setHoveredId}
+            adding={adding}
+            newLocation={newLoc}
+            onMapClick={(lng, lat) => setNewLoc({ lat, lng })}
           />
         </main>
 
@@ -176,6 +230,14 @@ export default function App() {
               submarket={submarket}
               onSubmarket={setSubmarket}
             />
+            {isEditor && (
+              <button
+                onClick={startAdd}
+                className="w-full rounded-md border border-dashed border-ecr-red-20 py-2 font-ui text-[11px] font-semibold uppercase tracking-[0.1em] text-ecr-red transition-colors hover:bg-ecr-red hover:text-white"
+              >
+                + Add property
+              </button>
+            )}
           </div>
           <div className="ecr-scroll min-h-0 flex-1 overflow-y-auto">
             <PropertyList
@@ -185,18 +247,52 @@ export default function App() {
               onSelect={setSelectedId}
               onHover={setHoveredId}
             />
+            {isEditor && removed.length > 0 && (
+              <div className="border-t border-ecr-charcoal-20 px-4 py-3">
+                <div className="mb-1.5 font-ui text-[10px] font-bold uppercase tracking-[0.14em] text-ecr-gray-mid">
+                  Removed ({removed.length})
+                </div>
+                {removed.map((p) => (
+                  <div key={p.id} className="flex items-center justify-between py-1">
+                    <span className="min-w-0 truncate font-ui text-[11px] text-ecr-charcoal-70">
+                      {p.name}
+                    </span>
+                    <button
+                      onClick={() => restore(p.id)}
+                      className="ml-2 flex-none font-ui text-[10px] font-semibold uppercase tracking-[0.06em] text-ecr-red hover:underline"
+                    >
+                      Restore
+                    </button>
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
           <div className="border-t border-ecr-charcoal-20 px-4 py-2 font-ui text-[9px] uppercase tracking-[0.1em] text-ecr-gray-mid">
             {EDITION[pipeline]} · {all.length} projects · 114 W 7th St, Austin
           </div>
 
           {/* Detail overlay (sidebar width) */}
-          {selected && (
+          {selected && !adding && (
             <div className="absolute inset-0 z-30">
               <PropertyDetail
                 property={selected}
                 onClose={() => setSelectedId(null)}
                 onSaveOverride={saveOverride}
+                onRemove={removeProperty}
+              />
+            </div>
+          )}
+
+          {/* Add-property overlay */}
+          {adding && (
+            <div className="absolute inset-0 z-30">
+              <AddProperty
+                pipeline={pipeline}
+                location={newLoc}
+                onLocationChange={setNewLoc}
+                onSave={handleAddSave}
+                onCancel={cancelAdd}
               />
             </div>
           )}

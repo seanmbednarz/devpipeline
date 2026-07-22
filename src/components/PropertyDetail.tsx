@@ -11,6 +11,7 @@ interface PropertyDetailProps {
   property: Property
   onClose: () => void
   onSaveOverride: (id: string, patch: OverridePatch) => Promise<{ error: string | null }>
+  onRemove: (id: string) => Promise<{ error: string | null }>
 }
 
 function Field({ label, value }: { label: string; value: React.ReactNode }) {
@@ -56,12 +57,20 @@ const num = (s: string): number | null => {
   return s.trim() === '' || Number.isNaN(n) ? null : n
 }
 
-export function PropertyDetail({ property: p, onClose, onSaveOverride }: PropertyDetailProps) {
+export function PropertyDetail({ property: p, onClose, onSaveOverride, onRemove }: PropertyDetailProps) {
   const meta = STATUS_META[p.status]
   const { isEditor } = useAuth()
   const { photos, uploading, upload, remove, error: photoError } = usePropertyPhotos(p.id)
   const repoPhotos = PHOTO_MANIFEST[p.id] ?? []
   const fileRef = useRef<HTMLInputElement>(null)
+  const isAdded = p.id.startsWith('custom-')
+
+  const handleRemove = async () => {
+    const label = isAdded ? 'Delete this added property?' : 'Remove this property from the pipeline?'
+    if (!window.confirm(label)) return
+    await onRemove(p.id)
+    onClose()
+  }
 
   const [editing, setEditing] = useState(false)
   const [saving, setSaving] = useState(false)
@@ -290,6 +299,14 @@ export function PropertyDetail({ property: p, onClose, onSaveOverride }: Propert
                 label="Parking Ratio"
                 value={p.parkingRatio != null ? `${p.parkingRatio} / 1,000 SF` : null}
               />
+              {isEditor && (
+                <button
+                  onClick={handleRemove}
+                  className="mt-4 w-full rounded-md border border-ecr-red-20 py-2 font-ui text-[11px] font-semibold uppercase tracking-[0.1em] text-ecr-red transition-colors hover:bg-ecr-red hover:text-white"
+                >
+                  {isAdded ? 'Delete property' : 'Remove from pipeline'}
+                </button>
+              )}
             </>
           )}
         </div>
