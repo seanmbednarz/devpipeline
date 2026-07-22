@@ -5,6 +5,7 @@ import { formatSf } from '../lib/format'
 import { useAuth } from '../hooks/useAuth'
 import { usePropertyPhotos } from '../hooks/usePropertyPhotos'
 import type { OverridePatch } from '../hooks/useOverrides'
+import { PHOTO_MANIFEST } from '../data/photoManifest'
 
 interface PropertyDetailProps {
   property: Property
@@ -59,6 +60,7 @@ export function PropertyDetail({ property: p, onClose, onSaveOverride }: Propert
   const meta = STATUS_META[p.status]
   const { isEditor } = useAuth()
   const { photos, uploading, upload, remove, error: photoError } = usePropertyPhotos(p.id)
+  const repoPhotos = PHOTO_MANIFEST[p.id] ?? []
   const fileRef = useRef<HTMLInputElement>(null)
 
   const [editing, setEditing] = useState(false)
@@ -163,8 +165,18 @@ export function PropertyDetail({ property: p, onClose, onSaveOverride }: Propert
             )}
           </div>
           {photoError && <p className="mb-2 font-ui text-[11px] text-ecr-red">{photoError}</p>}
-          {photos.length > 0 ? (
+          {repoPhotos.length + photos.length > 0 ? (
             <div className="grid grid-cols-1 gap-2">
+              {/* Repo photos (static, managed in the repo) */}
+              {repoPhotos.map((src) => (
+                <img
+                  key={src}
+                  src={src}
+                  alt={p.name}
+                  className="aspect-[4/3] w-full rounded-md object-cover"
+                />
+              ))}
+              {/* Uploaded photos (Supabase; removable by editors) */}
               {photos.map((photo) => (
                 <div key={photo.id} className="group relative">
                   <img
