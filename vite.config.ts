@@ -2,8 +2,9 @@ import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 
 // Marks the app's module script with data-cfasync="false" so Cloudflare Rocket
-// Loader (enabled on the ecrtx.io zone) leaves it alone. Rocket Loader otherwise
-// defers/rewrites the ES module and the app never mounts on pipeline.ecrtx.io.
+// Loader (if ever enabled on the ecrtx.io zone) leaves it alone.
+// (The raw photo-import archive under public/property photos/ is stripped from
+// dist by the build script, so only optimized copies in public/photos/ ship.)
 function cfasyncFalse() {
   return {
     name: 'cfasync-false',
