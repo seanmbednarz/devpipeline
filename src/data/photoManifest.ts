@@ -219,5 +219,29 @@ export const PHOTO_MANIFEST: Record<string, string[]> = {
   ],
   "industrial-108": [
     "/photos/industrial-108/1.jpg"
+  ],
+  "office-60": [
+    "/photos/office-60/1.jpg"
+  ],
+  "office-61": [
+    "/photos/office-61/1.jpg"
+  ],
+  "office-62": [
+    "/photos/office-62/1.jpg"
+  ],
+  "office-63": [
+    "/photos/office-63/1.jpg"
+  ],
+  "industrial-50": [
+    "/photos/industrial-50/1.jpg"
+  ],
+  "industrial-65": [
+    "/photos/industrial-65/1.jpg"
+  ],
+  "industrial-66": [
+    "/photos/industrial-66/1.jpg"
+  ],
+  "industrial-84": [
+    "/photos/industrial-84/1.jpg"
   ]
 }
