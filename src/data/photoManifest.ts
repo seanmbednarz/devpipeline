@@ -264,5 +264,63 @@ export const PHOTO_MANIFEST: Record<string, string[]> = {
   ],
   "industrial-97": [
     "/photos/industrial-97/1.jpg"
+  ],
+  "office-59": [
+    "/photos/office-59/1.jpg"
+  ],
+  "office-19": [
+    "/photos/office-19/1.jpg"
+  ],
+  "industrial-12": [
+    "/photos/industrial-12/1.jpg",
+    "/photos/industrial-12/2.jpg"
+  ],
+  "industrial-19": [
+    "/photos/industrial-19/1.jpg"
+  ],
+  "industrial-8": [
+    "/photos/industrial-8/1.jpg"
+  ],
+  "industrial-21": [
+    "/photos/industrial-21/1.jpg"
+  ],
+  "industrial-25": [
+    "/photos/industrial-25/1.jpg"
+  ],
+  "industrial-30": [
+    "/photos/industrial-30/1.jpg"
+  ],
+  "industrial-20": [
+    "/photos/industrial-20/1.jpg"
+  ],
+  "industrial-22": [
+    "/photos/industrial-22/1.jpg"
+  ],
+  "industrial-16": [
+    "/photos/industrial-16/1.jpg"
+  ],
+  "industrial-13": [
+    "/photos/industrial-13/1.jpg"
+  ],
+  "industrial-29": [
+    "/photos/industrial-29/1.jpg"
+  ],
+  "industrial-7": [
+    "/photos/industrial-7/1.jpg"
+  ],
+  "industrial-32": [
+    "/photos/industrial-32/1.jpg"
+  ],
+  "industrial-24": [
+    "/photos/industrial-24/1.jpg"
+  ],
+  "industrial-33": [
+    "/photos/industrial-33/1.jpg"
+  ],
+  "industrial-15": [
+    "/photos/industrial-15/1.jpg"
+  ],
+  "industrial-28": [
+    "/photos/industrial-28/1.jpg"
   ]
 }
