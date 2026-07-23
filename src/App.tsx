@@ -110,6 +110,25 @@ export default function App() {
 
   const selected = useMemo(() => all.find((p) => p.id === selectedId) ?? null, [all, selectedId])
 
+  // Arrow-key navigation: once a property is open, ← / → step through the
+  // visible (filtered, ordered) list. Wraps around at the ends.
+  useEffect(() => {
+    if (!selectedId || adding || printing) return
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key !== 'ArrowLeft' && e.key !== 'ArrowRight') return
+      const t = e.target as HTMLElement | null
+      if (t && (t.isContentEditable || /^(INPUT|TEXTAREA|SELECT)$/.test(t.tagName))) return
+      const idx = visible.findIndex((p) => p.id === selectedId)
+      if (idx === -1) return
+      e.preventDefault()
+      const delta = e.key === 'ArrowRight' ? 1 : -1
+      const next = visible[(idx + delta + visible.length) % visible.length]
+      if (next) setSelectedId(next.id)
+    }
+    window.addEventListener('keydown', onKey)
+    return () => window.removeEventListener('keydown', onKey)
+  }, [selectedId, visible, adding, printing])
+
   const toggleStatus = (s: Status) =>
     setActive((prev) => {
       const next = new Set(prev)
