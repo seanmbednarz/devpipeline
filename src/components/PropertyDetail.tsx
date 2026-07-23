@@ -283,6 +283,10 @@ export function PropertyDetail({ property: p, onClose, onSaveOverride, onRemove 
                 </button>
               )}
               <Field label={PIPELINE_META[p.pipeline].sizeLabel} value={formatSf(p.sf)} />
+              <Field
+                label="Percent Leased"
+                value={p.percentLeased != null ? `${p.percentLeased}%` : null}
+              />
               <Field label="Available Space" value={p.availableSf ? formatSf(p.availableSf) : null} />
               <Field label="Building Class" value={p.buildingClass ? `Class ${p.buildingClass}` : null} />
               <Field label="Buildings" value={p.buildings ?? null} />

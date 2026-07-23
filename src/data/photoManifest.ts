@@ -10,41 +10,14 @@ export const PHOTO_MANIFEST: Record<string, string[]> = {
   "office-3": [
     "/photos/office-3/1.jpg"
   ],
-  "office-4": [
-    "/photos/office-4/1.jpg"
-  ],
-  "office-5": [
-    "/photos/office-5/1.jpg"
-  ],
-  "office-7": [
-    "/photos/office-7/1.jpg"
-  ],
   "office-8": [
     "/photos/office-8/1.jpg"
-  ],
-  "office-9": [
-    "/photos/office-9/1.jpg"
-  ],
-  "office-10": [
-    "/photos/office-10/1.jpg"
   ],
   "office-11": [
     "/photos/office-11/1.jpg"
   ],
-  "office-12": [
-    "/photos/office-12/1.jpg"
-  ],
-  "office-13": [
-    "/photos/office-13/1.jpg"
-  ],
   "office-14": [
     "/photos/office-14/1.jpg"
-  ],
-  "office-16": [
-    "/photos/office-16/1.jpg"
-  ],
-  "office-17": [
-    "/photos/office-17/1.jpg"
   ],
   "office-18": [
     "/photos/office-18/1.jpg"
@@ -58,47 +31,17 @@ export const PHOTO_MANIFEST: Record<string, string[]> = {
   "office-22": [
     "/photos/office-22/1.jpg"
   ],
-  "office-24": [
-    "/photos/office-24/1.jpg"
-  ],
-  "office-25": [
-    "/photos/office-25/1.jpg"
-  ],
-  "office-26": [
-    "/photos/office-26/1.jpg"
-  ],
-  "office-27": [
-    "/photos/office-27/1.jpg"
-  ],
-  "office-28": [
-    "/photos/office-28/1.jpg"
-  ],
   "office-30": [
     "/photos/office-30/1.jpg"
   ],
-  "office-31": [
-    "/photos/office-31/1.jpg"
-  ],
-  "office-33": [
-    "/photos/office-33/1.jpg"
-  ],
   "office-34": [
     "/photos/office-34/1.jpg"
-  ],
-  "office-35": [
-    "/photos/office-35/1.jpg"
-  ],
-  "office-36": [
-    "/photos/office-36/1.jpg"
   ],
   "office-37": [
     "/photos/office-37/1.jpg"
   ],
   "office-38": [
     "/photos/office-38/1.jpg"
-  ],
-  "office-39": [
-    "/photos/office-39/1.jpg"
   ],
   "office-40": [
     "/photos/office-40/1.jpg"
@@ -109,47 +52,20 @@ export const PHOTO_MANIFEST: Record<string, string[]> = {
   "office-43": [
     "/photos/office-43/1.jpg"
   ],
-  "office-44": [
-    "/photos/office-44/1.jpg"
-  ],
-  "office-45": [
-    "/photos/office-45/1.jpg"
-  ],
   "office-46": [
     "/photos/office-46/1.jpg"
   ],
   "office-47": [
     "/photos/office-47/1.jpg"
   ],
-  "office-48": [
-    "/photos/office-48/1.jpg"
-  ],
-  "office-49": [
-    "/photos/office-49/1.jpg"
-  ],
-  "office-51": [
-    "/photos/office-51/1.jpg"
-  ],
-  "office-52": [
-    "/photos/office-52/1.jpg"
-  ],
   "office-53": [
     "/photos/office-53/1.jpg"
-  ],
-  "office-54": [
-    "/photos/office-54/1.jpg"
   ],
   "office-55": [
     "/photos/office-55/1.jpg"
   ],
   "office-56": [
     "/photos/office-56/1.jpg"
-  ],
-  "office-57": [
-    "/photos/office-57/1.jpg"
-  ],
-  "office-58": [
-    "/photos/office-58/1.jpg"
   ],
   "office-15": [
     "/photos/office-15/1.jpg"

@@ -28,6 +28,8 @@ export interface Property {
   parkingRatio?: number | null
   buildings?: number | null
   constructionBegin?: string | null
+  /** Percent leased (0–100), from the office pipeline data */
+  percentLeased?: number | null
 
   /** User-added photo URLs (populated once the editable backend is wired) */
   photos?: string[]

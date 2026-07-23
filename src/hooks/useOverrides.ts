@@ -21,6 +21,7 @@ const EDITABLE = [
   'city',
   'zip',
   'county',
+  'percentLeased',
 ] as const
 type EditableKey = (typeof EDITABLE)[number]
 
