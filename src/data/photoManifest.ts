@@ -255,7 +255,8 @@ export const PHOTO_MANIFEST: Record<string, string[]> = {
     "/photos/industrial-19/1.jpg"
   ],
   "industrial-8": [
-    "/photos/industrial-8/1.jpg"
+    "/photos/industrial-8/1.jpg",
+    "/photos/industrial-8/2.jpg"
   ],
   "industrial-21": [
     "/photos/industrial-21/1.jpg"
@@ -295,5 +296,47 @@ export const PHOTO_MANIFEST: Record<string, string[]> = {
   ],
   "industrial-15": [
     "/photos/industrial-15/1.jpg"
+  ],
+  "industrial-55": [
+    "/photos/industrial-55/1.jpg"
+  ],
+  "industrial-48": [
+    "/photos/industrial-48/1.jpg"
+  ],
+  "industrial-57": [
+    "/photos/industrial-57/1.jpg"
+  ],
+  "industrial-36": [
+    "/photos/industrial-36/1.jpg"
+  ],
+  "industrial-61": [
+    "/photos/industrial-61/1.jpg"
+  ],
+  "industrial-54": [
+    "/photos/industrial-54/1.jpg"
+  ],
+  "industrial-49": [
+    "/photos/industrial-49/1.jpg"
+  ],
+  "industrial-62": [
+    "/photos/industrial-62/1.jpg"
+  ],
+  "industrial-51": [
+    "/photos/industrial-51/1.jpg"
+  ],
+  "industrial-59": [
+    "/photos/industrial-59/1.jpg"
+  ],
+  "industrial-56": [
+    "/photos/industrial-56/1.jpg"
+  ],
+  "industrial-35": [
+    "/photos/industrial-35/1.jpg"
+  ],
+  "industrial-53": [
+    "/photos/industrial-53/1.jpg"
+  ],
+  "industrial-60": [
+    "/photos/industrial-60/1.jpg"
   ]
 }
